@@ -10,9 +10,29 @@ def adicionarplacar(ved):
     for linha in arquivo:
         linha = linha.strip()
         placar.append(linha)
-    x = placar.index('oi')
-    print(x)
-
+    try:
+        x = placar.index(nomep1)
+        placar[x+1] = int(placar[x+1]) + ved[0]
+        placar[x+2] = int(placar[x+2]) + ved[1]
+    except:
+        placar.append(nomep1)
+        placar.append(ved[0])
+        placar.append(ved[1])
+    try:
+        x = placar.index(nomep2)
+        placar[x+1] = int(placar[x+1]) + ved[1]
+        placar[x+2] = int(placar[x+2]) + ved[0]
+    except:
+        placar.append(nomep2)
+        placar.append(ved[1])
+        placar.append(ved[0])
+    arquivo.close()
+    arquivo = open('placar.txt','w')
+    for linha in range(len(placar)):
+        placar[linha] = str(placar[linha]) + '\n'
+    arquivo.writelines(placar)
+    arquivo.close()
+    
 def Placar():
     arquivo = open('placar.txt','r')
     placar = []
@@ -75,6 +95,7 @@ def jpp(p1orp2):
         while selecao != 'Sim' and selecao != 'Nao':
             os.system('clear')
             selecao = input('Deseja jogar novamente? (Sim) (Nao):')
+    ved.append(p1orp2)
     return ved
 def selecaojogada(p1orp2):
     os.system('clear')
