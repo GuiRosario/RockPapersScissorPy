@@ -40,8 +40,9 @@ def Placar():
         linha = linha.strip()
         placar.append(linha)
     cont = 0
+    print("{0:<20}".format("Nome             Vitórias            Derrotas"))
     for x in placar:
-        print(x,'   ',end="")
+        print("{0:<20}".format(x),end="")
         cont += 1
         if(cont == 3):
             cont = 0
