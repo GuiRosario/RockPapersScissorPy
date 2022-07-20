@@ -4,7 +4,6 @@ import numpy as np
 
 def adicionarplacar(ved):
     nomep1 = input('Digite o seu nome player 1:')
-    nomep2 = input('Digite o seu nome player 2:')
     arquivo = open('placar.txt','r')
     placar = []
     for linha in arquivo:
@@ -18,14 +17,17 @@ def adicionarplacar(ved):
         placar.append(nomep1)
         placar.append(ved[0])
         placar.append(ved[1])
-    try:
-        x = placar.index(nomep2)
-        placar[x+1] = int(placar[x+1]) + ved[1]
-        placar[x+2] = int(placar[x+2]) + ved[0]
-    except:
-        placar.append(nomep2)
-        placar.append(ved[1])
-        placar.append(ved[0])
+
+    if(ved[2] != 'CPU'):
+        nomep2 = input('Digite o seu nome player 2:')
+        try:
+            x = placar.index(nomep2)
+            placar[x+1] = int(placar[x+1]) + ved[1]
+            placar[x+2] = int(placar[x+2]) + ved[0]
+        except:
+            placar.append(nomep2)
+            placar.append(ved[1])
+            placar.append(ved[0])
     arquivo.close()
     arquivo = open('placar.txt','w')
     for linha in range(len(placar)):
@@ -40,18 +42,26 @@ def Placar():
         linha = linha.strip()
         placar.append(linha)
     cont = 0
-    print("{0:<20}".format("Nome             Vitórias            Derrotas"))
+    print("{0:<20}".format("Nome                Vitórias            Derrotas"))
+    colocacao = 1
+    print("{0:<3}".format('%d.' % colocacao) ,end="")
     for x in placar:
         print("{0:<20}".format(x),end="")
         cont += 1
         if(cont == 3):
             cont = 0
             print('\n')
+            colocacao += 1
+            if(colocacao <= (len(placar)/3)):
+                print("{0:<3}".format('%d.' % colocacao) ,end="")
 
     arquivo.close
-
+    input()
+    telainicial()
 def P1VSCPU():
-    jpp('CPU')
+    ved = []
+    ved = jpp('CPU')
+    adicionarplacar(ved)
     telainicial()
 def jpp(p1orp2):
     selecao = 'Sim'
@@ -70,26 +80,21 @@ def jpp(p1orp2):
                 jogadacpu = 'papel'
             else:
                 jogadacpu = 'tesoura'
-
+            print('CPU jogou',jogadacpu,'!')
             qg = quemganhou(jogadap1, jogadacpu)
-            if(qg == 2):
-                cpuvenceu = 1
-            else:
-                cpuvenceu = 0
         else:
             jogadap1 = selecaojogada('P2')
             jogadap2 = selecaojogada('P1')
             qg = quemganhou(jogadap2, jogadap1) 
-        if(p1orp2 == 'CPU'):
-            print('CPU jogou',jogadacpu,'!')
-            if(cpuvenceu == 1):
-                print('CPU venceu!')
         if(qg == 1):
             print('Jogador 1 venceu!')
             ved[0] = ved[0] + 1
         elif(qg == 2):
-            print('Jogador 2 venceu!')
-            ved[1] = ved[1] + 1
+            if(p1orp2 == 'CPU'):
+                print('CPU venceu!')
+            else:
+                 print('Jogador 2 venceu!') 
+            ved[1] = ved[1] + 1   
         else:
             print('Empate!')
         selecao = input('Deseja jogar novamente? (Sim) (Nao):')
@@ -121,11 +126,11 @@ def quemganhou(jogadap1,jogadap2):
             return 1
     elif(jogadap1 == 'papel'):
         if(jogadap2 == 'pedra'):
-            return 2
+            return 1
         elif(jogadap2 == 'papel'):
             return 3
         elif(jogadap2 == 'tesoura'):
-            return 1
+            return 2
     elif(jogadap1 == 'tesoura'):
         if(jogadap2 == 'pedra'):
             return 2
